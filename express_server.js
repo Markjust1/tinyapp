@@ -35,13 +35,6 @@ app.get("/urls/:someShortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-app.post('/urls', (req, res) => {
-  let shortUrl = generateRandomString();
-  let longUrl = req.body.longURL;
-  urlDatabase[shortUrl] = longUrl;
-  res.redirect(`/urls/${shortUrl}`);
-});
-
 app.get("/u/:myShortURL", (req, res) => {
   // console.log('This is my urlDatabase', urlDatabase);
   // console.log('This is my shortUrl:', req.params.myShortURL);
@@ -50,11 +43,31 @@ app.get("/u/:myShortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-  app.post('/urls/:myShortURL/delete', (req, res) => {
-    const shortUrl = req.params.myShortURL;
-    delete urlDatabase[shortUrl];
-    res.redirect('/');
-  });
+app.post('/urls', (req, res) => {
+  let shortUrl = generateRandomString();
+  let longUrl = req.body.longURL;
+  urlDatabase[shortUrl] = longUrl;
+  console.log(urlDatabase);
+  res.redirect(`/urls/`);
+});
+
+app.post('/urls/:myShortURL/delete', (req, res) => {
+  const shortUrl = req.params.myShortURL;
+  delete urlDatabase[shortUrl];
+  res.redirect('/urls');
+});
+
+app.post('/urls/:id', (req, res) => {
+  const longUrl = req.body.longURL;
+  const shortUrl = req.params.id;
+  //console.log('Database', urlDatabase);
+  urlDatabase[shortUrl] = longUrl;
+  //console.log('Database', urlDatabase);
+  //console.log(req.params.id);
+  res.redirect('/');
+});
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app is listening on port:${PORT}`);
