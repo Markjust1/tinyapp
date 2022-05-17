@@ -43,10 +43,10 @@ app.post('/urls', (req, res) => {
 });
 
 app.get("/u/:myShortURL", (req, res) => {
-  console.log('This is my urlDatabase', urlDatabase);
-  console.log('This is my shortUrl:', req.params.myShortURL);
+  // console.log('This is my urlDatabase', urlDatabase);
+  // console.log('This is my shortUrl:', req.params.myShortURL);
   const longURL = urlDatabase[req.params.myShortURL];
-  console.log('This is my longURL',longURL);
+  // console.log('This is my longURL',longURL);
   res.redirect(longURL);
 });
 
