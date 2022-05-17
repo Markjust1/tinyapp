@@ -60,7 +60,7 @@ function generateRandomString() {
   const charSet =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const setLength = charSet.length;
-  for (let i = 0; i <= 6; i++) {
+  for (let i = 0; i < 6; i++) {
     randomString += charSet.charAt(Math.floor(Math.random() * setLength));
   }
   return randomString;
