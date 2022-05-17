@@ -50,6 +50,12 @@ app.get("/u/:myShortURL", (req, res) => {
   res.redirect(longURL);
 });
 
+  app.post('/urls/:myShortURL/delete', (req, res) => {
+    const shortUrl = req.params.myShortURL;
+    delete urlDatabase[shortUrl];
+    res.redirect('/');
+  });
+
 app.listen(PORT, () => {
   console.log(`Example app is listening on port:${PORT}`);
 });
