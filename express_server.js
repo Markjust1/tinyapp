@@ -29,6 +29,12 @@ app.get('/urls', (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+app.get('/register', (req, res) => {
+  const username = req.cookies["username"];
+  const templateVars = { username };
+  res.render("urls_register", templateVars);
+});
+
 
 app.get("/urls/:someShortURL", (req, res) => {
   const username = req.cookies["username"];
