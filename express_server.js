@@ -80,13 +80,14 @@ app.get('/login', (req, res) => {
 app.get("/urls/:someShortURL", (req, res) => {
   const user_id = req.cookies["user_id"];
   const user = users[user_id];
+  console.log('user ID:', user_id)
   const longURL = urlDatabase[req.params.someShortURL].longURL;
   const templateVars = { shortURL: req.params.someShortURL, longURL: longURL, user};
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:myShortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.myShortURL];
+  const longURL = urlDatabase[req.params.myShortURL].longURL;
   res.redirect(longURL);
 });
 
