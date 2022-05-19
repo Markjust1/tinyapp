@@ -110,7 +110,7 @@ app.post('/urls/:myShortURL/delete', (req, res) => {
     delete urlDatabase[shortUrl];
     res.redirect('/urls');
   } else {
-    res.send('Hello world');
+    res.send('Access denied');
   }
 });
 
