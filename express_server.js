@@ -6,12 +6,7 @@ const bodyParser = require("body-parser");
 const urlencoded = require('body-parser/lib/types/urlencoded');
 const bcrypt = require('bcryptjs');
 
-// const {
-//   generateRandomString,
-//   findUser,
-//   findEmail,
-//   urlsForUser
-//   } = require('./helper');
+const { generateRandomString, findUser, urlsForUser } = require('./helpers');
 
 ////// MIDDLEWARE ///////
 
@@ -21,6 +16,8 @@ app.use(cookieSession({
   name: 'user',
   keys: [ 'hello', 'world' ],
 }))
+
+//////// DATABASES //////////
 
 const users = { 
   "userRandomID": {
@@ -46,6 +43,7 @@ const urlDatabase = {
     }
 };
 
+
 //////// HOME PAGE //////////
 
 app.get('/urls', (req, res) => {
@@ -53,16 +51,16 @@ app.get('/urls', (req, res) => {
   const user = users[user_id];
   const templateVars = { 
     user,
-    urls: urlsForUser(user_id) };
+    urls: urlsForUser(user_id, urlDatabase) };
   res.render("urls_index", templateVars);
 });
+
 //////// CREATING NEW URL //////////
 
 app.get("/urls/new", (req, res) => {
   const user_id = req.session.user_id;
   if (!user_id) {
     res.status(403).send('Login or register to shorten the URL');
-    //res.redirect('/urls');
   }
   
   const user = users[user_id];
@@ -70,7 +68,7 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
-//////// REGISTER //////////
+//////// REGISTER GET REQUEST //////////
 
 app.get('/register', (req, res) => {
   const user_id = req.session.user_id;
@@ -78,7 +76,7 @@ app.get('/register', (req, res) => {
   const templateVars = { user };
   res.render("urls_register", templateVars);
 });
-//////// LOGIN //////////
+//////// LOGIN GET REQUEST //////////
 
 app.get('/login', (req, res) => {
   const user_id = req.session.user_id;
@@ -87,7 +85,8 @@ app.get('/login', (req, res) => {
   res.render("urls_login", templateVars);
 });
 
-//////// SHORT URL //////////
+//////// SHORT URL GET REQUEST //////////
+/////////////////////////////////////////
 
 app.get("/urls/:someShortURL", (req, res) => {
   const user_id = req.session.user_id;
@@ -102,7 +101,10 @@ app.get("/u/:myShortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-//////// POST //////////
+/////////////////////////////////////////
+//////////    POST REQUESTS    //////////
+/////////////////////////////////////////
+
 
 app.post('/urls', (req, res) => {
   const userRandomID = req.session.user_id;
@@ -137,12 +139,12 @@ app.post('/urls/:id', (req, res) => {
 
 app.post('/login', (req, res) => {
   const candidateEmail = req.body.email;
-  if (candidateEmail !== findEmail(candidateEmail)) {
+  const candidatePassword = req.body.password;
+  const user = findUser(candidateEmail, users);
+  if (candidateEmail !== user.email) {
     res.redirect('/register');
     return;
   }
-  const candidatePassword = req.body.password;  // input password
-  const user = findUser(candidateEmail);
   if (!user) {
     res.status(403).redirect('/register');
     return;
@@ -170,13 +172,11 @@ app.post('/register', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const hashedPassword = bcrypt.hashSync(password, 10);
-  //console.log(hashedPassword);
-  // checking email and password for the empty string
   if (email.length === 0 || password.length === 0) {
     res.status(404).send("Enter a valid email and password");
     return;
   }
-  if (findUser(email)) {
+  if (findUser(email, users)) {
     res.status(404).send("User already exists");
     return;
   }
@@ -196,38 +196,3 @@ app.post('/register', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app is listening on port:${PORT}`);
 });
-
-//module.exports = { users, urlDatabase };
-
-///////////////////////////////////////////
-//////////      FUNCTIONS     /////////////
-///////////////////////////////////////////
-
-const generateRandomString = () => {
-  return Math.random().toString(36).substring(2, 8);
-} 
-
-const findUser = (email) => {
-  for (let user in users) {
-    if (email === users[user].email) {
-      return users[user];
-    }
-  }
-}
-
-const findEmail = (email) => {
-  for (let user in users) {
-    if (email === users[user].email) {
-      return users[user].email;
-    }
-  }
-}
-const urlsForUser = (id) => {
-  const urls = {};
-  for (let url in urlDatabase) {
-    if ( urlDatabase[url].userID === id) {
-      urls[url] = urlDatabase[url];
-    }
-  }
-  return urls;
-}
