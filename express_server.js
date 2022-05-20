@@ -127,9 +127,9 @@ app.post('/urls/:myShortURL/delete', (req, res) => {
   const shortUrl = req.params.myShortURL;
   if (userId === urlDatabase[shortUrl].userID) {
     delete urlDatabase[shortUrl];
-    res.redirect('/urls');
+    return res.redirect('/urls');
   } else {
-    res.status(403).send('Access denied');
+    return res.status(403).send('Access denied');
   }
 });
 
@@ -147,20 +147,18 @@ app.post('/login', (req, res) => {
   const candidateEmail = req.body.email;
   const candidatePassword = req.body.password;
   const user = findUser(candidateEmail, users);
-  if (candidateEmail !== user.email) {
-    res.redirect('/register');
-    return;
-  }
   if (!user) {
-    res.status(403).redirect('/register');
-    return;
+    return res.status(403).redirect('/register');
+  }
+  if (candidateEmail !== user.email) {
+    return res.redirect('/register');
+
   }
   if (bcrypt.compareSync(candidatePassword, user.password)) {
-
     req.session.user_id = user.id;
     res.redirect('/urls');
   } else {
-    res.status(403).send("Incorrect password");
+    return res.status(403).send("Incorrect password");
   }
 });
 
@@ -179,12 +177,10 @@ app.post('/register', (req, res) => {
   const password = req.body.password;
   const hashedPassword = bcrypt.hashSync(password, 10);
   if (email.length === 0 || password.length === 0) {
-    res.status(404).send("Enter a valid email and password");
-    return;
+    return res.status(404).send("Enter a valid email and password");
   }
   if (findUser(email, users)) {
-    res.status(404).send("User already exists");
-    return;
+    return res.status(404).send("User already exists");
   }
   userId = {
     id,
@@ -194,6 +190,7 @@ app.post('/register', (req, res) => {
   users[id] = userId;
   req.session.user_id = id;
   console.log(users);
+  req.session.user_id = id;
   res.redirect('/urls');
 
 });
