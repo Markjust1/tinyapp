@@ -15,32 +15,32 @@ app.set("view engine", "ejs");
 app.use(cookieSession({
   name: 'user',
   keys: [ 'hello', 'world' ],
-}))
+}));
 
 //////// DATABASES //////////
 
-const users = { 
+const users = {
   "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
+    id: "userRandomID",
+    email: "user@example.com",
     password: "purple-monkey-dinosaur"
   },
- "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
     password: "dishwasher-funk"
   }
-}
+};
 
 const urlDatabase = {
   b6UTxQ: {
-        longURL: "https://www.tsn.ca",
-        userID: "aJ48lW"
-    },
+    longURL: "https://www.tsn.ca",
+    userID: "aJ48lW"
+  },
   i3BoGr: {
-        longURL: "https://www.google.ca",
-        userID: "aJ48lW"
-    }
+    longURL: "https://www.google.ca",
+    userID: "aJ48lW"
+  }
 };
 
 
@@ -49,7 +49,7 @@ const urlDatabase = {
 app.get('/urls', (req, res) => {
   const user_id = req.session.user_id;
   const user = users[user_id];
-  const templateVars = { 
+  const templateVars = {
     user,
     urls: urlsForUser(user_id, urlDatabase) };
   res.render("urls_index", templateVars);
@@ -60,9 +60,8 @@ app.get('/urls', (req, res) => {
 app.get("/urls/new", (req, res) => {
   const user_id = req.session.user_id;
   if (!user_id) {
-    res.status(403).send('Login or register to shorten the URL');
+    return res.status(403).send('Login or register to shorten the URL');
   }
-  
   const user = users[user_id];
   const templateVars = { user };
   res.render("urls_new", templateVars);
@@ -186,9 +185,8 @@ app.post('/register', (req, res) => {
     password: hashedPassword
   };
   users[id] = userId;
-
   req.session.user_id = id;
-  console.log(users)
+  console.log(users);
   res.redirect('/urls');
 
 });
