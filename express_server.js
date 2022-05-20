@@ -5,7 +5,7 @@ const cookieSession = require('cookie-session');
 const bodyParser = require("body-parser");
 const urlencoded = require('body-parser/lib/types/urlencoded');
 const bcrypt = require('bcryptjs');
-
+// Functions import
 const { generateRandomString, findUser, urlsForUser } = require('./helpers');
 
 ////// MIDDLEWARE ///////
@@ -46,8 +46,15 @@ const urlDatabase = {
 
 //////// HOME PAGE //////////
 
+app.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
 app.get('/urls', (req, res) => {
   const user_id = req.session.user_id;
+  if (!user_id) {
+    res.redirect('/login');
+  }
   const user = users[user_id];
   const templateVars = {
     user,

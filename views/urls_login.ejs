@@ -11,17 +11,24 @@
   </head>
   <body>
     <%- include('partials/_header') %>
-    <main style="margin: 1em;"><br>
-      <h3>Log In:</h3>
-      <form class="form-inline" action="/login" method="POST">
-        <div class="form-group mb-2">
-          <label for="email">Email:</label>
-          <input class="form-control" type="email" name="email" placeholder="Your Email" style="width: 300px; margin: 1em">
-          <label for="password">Password:</label>
-          <input class="form-control" type="password" name="password" placeholder="Your Password" style="width: 300px; margin: 1em">
-          <button type="submit" class="btn btn-primary">Login</button>
-        </div>
-      </form>
+    <main style="margin: 1em;"><br><br><br>
+      <div style="margin-left: 33%;">
+        <h3 style="margin-left: 27px;">Already have account?</h3>
+        <h3 style="margin-left: 120px;">Login:</h3>
+        <form class="form-inline" action="/login" method="POST">
+          <div class="form-group mb-2">
+            <div style="max-width: 300px;">
+              <label for="email"></label>
+              <input class="form-control" type="email" name="email" placeholder="Your Email" style="width: 300px; margin: 1em">
+              <label for="password"></label>
+              <input class="form-control" type="password" name="password" placeholder="Your Password" style="width: 300px; margin: 1em">
+              <div style="margin-left: 42%;">
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </main>
       <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

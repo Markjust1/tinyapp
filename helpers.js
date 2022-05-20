@@ -15,7 +15,7 @@ const findUser = (email, users) => {
 const urlsForUser = (id, database) => {
   const urls = {};
   for (let url in database) {
-    if ( database[url].userID === id) {
+    if (database[url].userID === id) {
       urls[url] = database[url];
     }
   }
@@ -23,7 +23,7 @@ const urlsForUser = (id, database) => {
 };
 
 module.exports = {
-   generateRandomString,
-   findUser,
-   urlsForUser
-   };
+  generateRandomString,
+  findUser,
+  urlsForUser
+};
