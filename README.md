@@ -6,7 +6,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ***
 Here we can see the "Create Account" page:
-!["Create Account page"](./app_screenshots/Logon_page.png)
+!["Create Account page"](./app_screenshots/create_account_page.png)
 ***
 Here we have the login page, in case you already created an account:
 !["Login page"](./app_screenshots/Login_page.png)
