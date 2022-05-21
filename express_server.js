@@ -95,10 +95,28 @@ app.get('/login', (req, res) => {
 /////////////////////////////////////////
 
 app.get("/urls/:someShortURL", (req, res) => {
-  const user_id = req.session.user_id;
-  const user = users[user_id];
-  const longURL = urlDatabase[req.params.someShortURL].longURL;
-  const templateVars = { shortURL: req.params.someShortURL, longURL: longURL, user};
+  if (!req.session.user_id) {
+    return res.redirect('/login');
+  }
+
+  const shortURL = req.params.someShortURL;
+  if (!urlDatabase[shortURL]) {
+    return res.status(404).send('URL does not exist');
+  }
+
+  const sessionUserId = req.session.user_id;
+  const shortUrlRecord = urlDatabase[shortURL];
+  if (shortUrlRecord.userID !== sessionUserId) {
+    return res.status(403).send('Unauthorised user');
+  }
+
+  const user = users[sessionUserId];
+  const longURL = shortUrlRecord.longURL;
+  const templateVars = { 
+    shortURL: shortURL, 
+    longURL: longURL, 
+    user
+  };
   res.render("urls_show", templateVars);
 });
 
@@ -171,7 +189,6 @@ app.post('/logout', (req, res) => {
 //////// REGISTER //////////
 
 app.post('/register', (req, res) => {
-  let userId = {};
   const id = generateRandomString();
   const email = req.body.email;
   const password = req.body.password;
@@ -182,14 +199,12 @@ app.post('/register', (req, res) => {
   if (findUser(email, users)) {
     return res.status(404).send("User already exists");
   }
-  userId = {
+  const userId = {
     id,
     email,
     password: hashedPassword
   };
   users[id] = userId;
-  req.session.user_id = id;
-  console.log(users);
   req.session.user_id = id;
   res.redirect('/urls');
 
