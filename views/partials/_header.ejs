@@ -10,11 +10,11 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
-    <span class="navbar-nav">
-      <a class="nav-item nav-link" href="/register">Register</a>
-      <a class="nav-item nav-link" href="/login">Login</a>
-    </span>
     <% if (!user) { %> 
+      <span class="navbar-nav">
+        <a class="nav-item nav-link" href="/register">Register</a>
+        <a class="nav-item nav-link" href="/login">Login</a>
+      </span>
       <form class="form-inline" action="/login" method="POST">
         <input class="form-control" type="text" name="email" placeholder="Email" style="width: 200px; display: none;">
         <button type="submit" style="margin-left: 10px; display: none;" class="btn btn-outline-dark">Login</button>

@@ -47,7 +47,7 @@ const urlDatabase = {
 //////// HOME PAGE //////////
 
 app.get('/', (req, res) => {
-  res.redirect('/login');
+  return res.redirect('/login');
 });
 
 app.get('/urls', (req, res) => {
@@ -59,7 +59,7 @@ app.get('/urls', (req, res) => {
   const templateVars = {
     user,
     urls: urlsForUser(user_id, urlDatabase) };
-  res.render("urls_index", templateVars);
+  return res.render("urls_index", templateVars);
 });
 
 //////// CREATING NEW URL //////////
@@ -71,7 +71,7 @@ app.get("/urls/new", (req, res) => {
   }
   const user = users[user_id];
   const templateVars = { user };
-  res.render("urls_new", templateVars);
+  return res.render("urls_new", templateVars);
 });
 
 //////// REGISTER GET REQUEST //////////
@@ -80,7 +80,7 @@ app.get('/register', (req, res) => {
   const user_id = req.session.user_id;
   const user = users[user_id];
   const templateVars = { user };
-  res.render("urls_register", templateVars);
+  return res.render("urls_register", templateVars);
 });
 //////// LOGIN GET REQUEST //////////
 
@@ -88,7 +88,7 @@ app.get('/login', (req, res) => {
   const user_id = req.session.user_id;
   const user = users[user_id];
   const templateVars = { user };
-  res.render("urls_login", templateVars);
+  return res.render("urls_login", templateVars);
 });
 
 //////// SHORT URL GET REQUEST //////////
@@ -117,12 +117,12 @@ app.get("/urls/:someShortURL", (req, res) => {
     longURL: longURL, 
     user
   };
-  res.render("urls_show", templateVars);
+  return res.render("urls_show", templateVars);
 });
 
 app.get("/u/:myShortURL", (req, res) => {
   const longURL = urlDatabase[req.params.myShortURL].longURL;
-  res.redirect(longURL);
+  return res.redirect(longURL);
 });
 
 /////////////////////////////////////////
@@ -135,7 +135,7 @@ app.post('/urls', (req, res) => {
   let shortUrl = generateRandomString();
   let longURL = req.body.longURL;
   urlDatabase[shortUrl] = {longURL, userID: userRandomID};
-  res.redirect(`urls/${shortUrl}`);
+  return res.redirect(`urls/${shortUrl}`);
 });
 
 //////// DELETE URL //////////
@@ -156,7 +156,7 @@ app.post('/urls/:id', (req, res) => {
   const longURL = req.body.longURL;
   const shortUrl = req.params.id;
   urlDatabase[shortUrl] = {longURL, userID: userId};
-  res.redirect('/urls/');
+  return res.redirect('/urls/');
 });
 
 //////// LOGIN //////////
@@ -174,7 +174,7 @@ app.post('/login', (req, res) => {
   }
   if (bcrypt.compareSync(candidatePassword, user.password)) {
     req.session.user_id = user.id;
-    res.redirect('/urls');
+    return res.redirect('/urls');
   } else {
     return res.status(403).send("Incorrect password");
   }
