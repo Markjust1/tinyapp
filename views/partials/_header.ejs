@@ -4,12 +4,6 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link" href="/urls">My URLs</a>
-        <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-      </div>
-    </div>
     <% if (!user) { %> 
       <span class="navbar-nav">
         <a class="nav-item nav-link" href="/register">Register</a>
@@ -20,6 +14,12 @@
         <button type="submit" style="margin-left: 10px; display: none;" class="btn btn-outline-dark">Login</button>
       </form>
       <% } else { %>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/urls">My URLs</a>
+            <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+          </div>
+        </div>
         <h6 style="margin-top: 10px; margin-left: 10px; margin-right: 10; color: rgba(246, 255, 0, 0.824);">Welcome: <%= user.email %>!</h6>
         <form class="form-inline" action="/logout" method="POST">
           <button type="submit" style="margin-left: 10px;" class="btn btn-outline-dark">Logout</button>
